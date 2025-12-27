@@ -5,33 +5,45 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
     - name: Run docker compose up
       run: docker compose up
-    - uses: actions/upload-artifact@v3
+
+    - name: Upload Ventoy Windows Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: ventoy-windows
         path: INSTALL/ventoy-*windows*
-    - uses: actions/upload-artifact@v3
+        if-no-files-found: error
+
+    - name: Upload Ventoy Linux Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: ventoy-linux
         path: INSTALL/ventoy-*linux*
-    - uses: actions/upload-artifact@v3
+
+    - name: Upload Ventoy LiveCD Artifact
+      uses: actions/upload-artifact@v4
       with:
         name: ventoy-livecd
         path: INSTALL/ventoy-*livecd*
-    - uses: actions/upload-artifact@v3
+
+    - name: Upload SHA256SUM
+      uses: actions/upload-artifact@v4
       with:
         name: SHA256SUM
         path: INSTALL/sha256.txt
-    - uses: actions/upload-artifact@v3
+
+    - name: Upload Build Log
+      uses: actions/upload-artifact@v4
       with:
         name: xxx-build-log
         path: DOC/build.log
